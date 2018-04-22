@@ -2,9 +2,6 @@
 Let's make transcription BIG!
 
 # Code Files
-**chip_atlas_celltype_list:**
-List of IDs assosciated with different cell lines. Currently using Lymphoblastoid cell line
-
 **downloadCHiPAtlas.py:** Download script to grab .BED files from the CHiP-Atlas database
 
 **filterTopHits.py:** Filtration Script to filter .BED files to make relevant files. 
