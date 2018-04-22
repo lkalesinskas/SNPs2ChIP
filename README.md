@@ -14,5 +14,7 @@ Options:
 
 # Example Files
 **ERX329611.bed:** Example .bed file from CHiP-Atlas
+
 **filtered_chr_ERX329611.bed:** Chromosome filtered .bed file
+
 **filtered_score_ERX329611.bed:** Score filtered .bed file
