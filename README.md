@@ -1,7 +1,7 @@
 # bigtranscription
 Let's make transcription BIG!
 
-# Files
+# Code Files
 **chip_atlas_celltype_list:**
 List of IDs assosciated with different cell lines. Currently using Lymphoblastoid cell line
 
@@ -11,3 +11,8 @@ List of IDs assosciated with different cell lines. Currently using Lymphoblastoi
 Options: 
 1) chromosomeFilter: Gets all peaks corresponding to a certain chromosome
 2) scoreFilter: Gets top k peaks from .bed file
+
+# Example Files
+**ERX329611.bed:** Example .bed file from CHiP-Atlas
+**filtered_chr_ERX329611.bed:** Chromosome filtered .bed file
+**filtered_score_ERX329611.bed:** Score filtered .bed file
