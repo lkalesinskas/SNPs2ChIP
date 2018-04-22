@@ -18,3 +18,6 @@ Options:
 **filtered_chr_ERX329611.bed:** Chromosome filtered .bed file
 
 **filtered_score_ERX329611.bed:** Score filtered .bed file
+
+# CHiP-Atlas Files
+**chip_atlas_celltype_list:** List of IDs assosciated with different cell lines. Currently using Lymphoblastoid cell line
