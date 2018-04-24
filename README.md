@@ -9,12 +9,12 @@ Let's make transcription BIG!
 **downloadCHiPAtlas.py:** Download script to grab .BED files from the CHiP-Atlas database
 
 **filterTopHits.py:** Filtration Script to filter .BED files to make relevant files. 
-
-**matrixMaker.py:** Makes the matrix for PCA/SVD/whatever. TODO: Get rid of blank stuff...
-
 Options: 
 1) chromosomeFilter: Gets all peaks corresponding to a certain chromosome
 2) scoreFilter: Gets top k peaks from .bed file
+
+**matrixMaker.py:** Makes the matrix for PCA/SVD/whatever. TODO: Get rid of blank stuff...
+
 
 # Example Files
 **ERX329611.bed:** Example .bed file from CHiP-Atlas
