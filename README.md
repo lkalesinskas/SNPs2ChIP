@@ -2,6 +2,10 @@
 Let's make transcription BIG!
 
 # Code Files
+**createFakeBED.py:** Creates fake BED file with bins for a certain length
+
+**intersectRunner.py:** Runs intersect script on a folder of files to find intersect between filtered files and a chromosome/bin file
+
 **downloadCHiPAtlas.py:** Download script to grab .BED files from the CHiP-Atlas database
 
 **filterTopHits.py:** Filtration Script to filter .BED files to make relevant files. 
@@ -15,6 +19,10 @@ Options:
 **filtered_chr_ERX329611.bed:** Chromosome filtered .bed file
 
 **filtered_score_ERX329611.bed:** Score filtered .bed file
+
+**final_filtered_chr_ERX329611.bed:** Filtered and intersected BED file
+
+**chr19.bed:** Chromosome 19 file for BED intersection
 
 # CHiP-Atlas Files
 **chip_atlas_celltype_list:** List of IDs assosciated with different cell lines. Currently using Lymphoblastoid cell line
