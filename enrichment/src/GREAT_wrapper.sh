@@ -11,4 +11,7 @@ out=$(dirname $(dirname $inBed))/${out_dir_name}/$(basename $(basename ${inBed} 
 if [ ! -d $(dirname $out) ] ; then mkdir -p $(dirname $out) ; fi
 
 
-GREATER --date=20171028 --minAnnotCount=5 --maxAnnotCount=1000 --requiredTests=neither --ontologies=${ontologies} hg19 $inBed $out
+cat $inBed \
+| grep -v "chr17_81195" \
+| GREATER --date=20171028 --minAnnotCount=5 --maxAnnotCount=1000 --requiredTests=neither --ontologies=${ontologies} hg19 /dev/stdin $out
+
