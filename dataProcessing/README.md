@@ -1,5 +1,4 @@
-# bigtranscription
-Let's make transcription BIG!
+# Data Processing by Larry:
 
 # Code Files
 **createFakeBED.py:** Creates fake BED file with bins for a certain length
