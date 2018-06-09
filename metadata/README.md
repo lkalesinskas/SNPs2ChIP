@@ -1,7 +1,7 @@
 # Metadata Analysis by Shankara Anand
 
 # Code Files
-**metadata_analysis.ipynb:** analysis done for parsing and understanding ChIP-Atlas Dataset
+**analysis.ipynb:** analysis done for parsing and understanding ChIP-Atlas Dataset
 
 **metadata_plotting.ipynb:** notebook for plotting
 
