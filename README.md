@@ -31,6 +31,15 @@ All codes are in relevant sub-directories
 
 This directory contains Python codes of the pipeline. If you are interested in using the software without updating the reference dataset, this directory should contain everything you need.
 
+#### ``snp2chip.py``
+
+This wrapper is used to query SNPS.
+
+The following gets the top 10 (k) principal components and their respective scores for SNPS 1105,1124,1245,1233 on chr 12, 15,12 on chr 8, and SNP 12 on chr 10.
+```
+snps2chip.py -i 12:1105,1124,1245,1233 8:15,12 10:12 -k 10 -d "PATH/TO/DATA/"
+```
+
 
 #### `enrichment`
 
@@ -39,4 +48,3 @@ This sub-directory contains the code to apply genomic region enrichment analysis
 #### `validation_for_class_project_write-up`
 
 This directory will be deleted once we prepare the camera-ready version of PSB paper.
-
