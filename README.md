@@ -31,15 +31,19 @@ All codes are in relevant sub-directories
 
 This directory contains Python codes of the pipeline. If you are interested in using the software without updating the reference dataset, this directory should contain everything you need.
 
-#### ``snp2chip.py``
+### ``snp2chip.py``
 
 This wrapper is used to query SNPS.
 
-The following gets the top 10 (k) principal components and their respective scores for SNPS 1105,1124,1245,1233 on chr 12, 15,12 on chr 8, and SNP 12 on chr 10.
+The following is an example used to query principal components for the Vitamin D Receptor (VDR).
+
 ```
-snps2chip.py -i 12:1105,1124,1245,1233 8:15,12 10:12 -k 10 -d "PATH/TO/DATA/"
+python snp2chip.py -i 10:6390000 13:42952000 2:33701000 5:1315000 -k 3 --verbose -M -o vdr_snps_out.txt -d PATH/TO/DATA/DIR
 ```
 
+Each input (``-i``) takes in a chromosome:SNP-location pair. One can query multiple SNPs from the same chromosome as such: ``2:132000,142000``: this queries at the SNP locations 132000 and 142000 at chromosome 2. This queries for 3 (``-k``) components and runs on multi-run mode, toggled by the ``-M``, which runs each SNP independently. If multiple SNPs are given to ``snp1chip.py``, it will compute summary values over all SNPs. One may also provide weights (``-w``) if running on summary mode (default). The output file (``-o``) is the path to a text file where results will be appended to or the file will be created if it does not exist. The data directory (``-d``) is also required but will default to ``../private_data``.
+
+See ``vdr_snps_out.txt`` for the output from multi-run mode. See ``vdr_snps_summary.txt`` for output from summary (default) mode.
 
 #### `enrichment`
 

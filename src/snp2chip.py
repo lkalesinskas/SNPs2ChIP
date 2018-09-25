@@ -11,6 +11,7 @@ from great import read_great_res_wrapper
 
 # TODO: implement something for find X given Y
 # TODO: figure out best output files
+# TODO: test assay indices
 #-----------------------------------------
 #   Parser
 #-----------------------------------------
@@ -38,8 +39,8 @@ parser.add_argument('-i', '--input_snps', action=StoreDictKeyPair, nargs="+", me
 parser.add_argument('-a', '--input_assays', nargs="+", type=int, default=None,
                     help='assay indices')
 
-parser.add_argument('-o', '--output_dir', type=str,
-                    default='.', help='output directory')
+parser.add_argument('-o', '--output_file', type=str,
+                    default='./snp2chip_out.txt', help='output directory')
 
 parser.add_argument('-w', '--weights', type=float, nargs="+",
                     default=None, help='weights for each intput snp/assay')
@@ -51,8 +52,11 @@ parser.add_argument('-d', '--data_dir', type=str,
                     default='../private_data',
                     help='data directory with genomic bins and decomposed matrices extracted form ChIP peaks')
 
-parser.add_argument('-v', '--verbose', type=bool,
-                    default=True, help='verbose run')
+parser.add_argument('-M', '--multi', action='store_true',
+                    help='multi-run: multiple input SNPs are treated separately and not queried for summary statistics.')
+
+parser.add_argument('--verbose', action='store_true',
+                    help='verbose run')
 
 args = parser.parse_args()
 
@@ -85,25 +89,48 @@ def check_weights(inputs,weights):
 #-----------------------------------------
 #   Build Genomic Bins and Decomposed Matrices
 #-----------------------------------------
+if args.verbose:
+    print('Loading data...')
 genomic_bins = Genomic_bins(os.path.join(args.data_dir, 'loci_def.bed'))
 decomposed_mats = Decomposed_matrices(os.path.join(args.data_dir, 'diagonalScore.csv.gz'), os.path.join(args.data_dir, 'uScore.csv.gz'), os.path.join(args.data_dir, 'vScore.csv.gz'))
 
 #-----------------------------------------
 #   Output
 #-----------------------------------------
+if args.verbose:
+    print('Computing results...')
+
 if args.input_snps is not None:
-    snps, chps = loc_to_list(args.input_snps)
+    # if user inputs SNPs
+    chrs,snps = loc_to_list(args.input_snps)
 
     if args.weights is not None:
         check_weights(snps, args.weights)
 
-    top_pcs, scores = decomposed_mats.find_pcs_given_loci_list(genomic_bins.find_loci_given_snps(snps,chps), args.weights, topk=args.top_k_compoments)
-    print(top_pcs, scores)
+    if args.multi:
+        if args.weights is not None and args.verbose:
+            print("Ignoring weights, multi-run mode in use.")
 
+        if args.verbose:
+            print("-------------------")
+        for idx, snp in enumerate(snps):
+            if args.verbose:
+                print("Outputting PCs for chr{}:{}".format(chrs[idx], snp))
+            top_pcs, scores = decomposed_mats.find_pcs_given_locus(genomic_bins.find_locus_given_snp(chrs[idx], snp), topk=args.top_k_compoments)
+            with open(args.output_file, 'a+') as f:
+                f.write('{}:{},{},{},{}\n'.format(chrs[idx], snp, args.top_k_compoments, top_pcs, scores))
+        if args.verbose:
+            print("-------------------")
+    else:
+        top_pcs, scores = decomposed_mats.find_pcs_given_loci_list(genomic_bins.find_loci_given_snps(chrs,snps), args.weights, topk=args.top_k_compoments)
+        with open(args.output_file, 'a+') as f:
+            f.write('{},{},{},{},{}\n'.format(chrs, snps, args.top_k_compoments, top_pcs, scores, args.weights))
 else:
-    # TODO: Needs to be tested
+    # if user inputs assay indices
     if args.weights is not None:
         check_weights(args.input_assays, args.weights)
-
     top_pcs, scores = decomposed_mats.find_pcs_given_loci_list(genomic_bins.find_loci_given_snps(snps,chps), args.weights, topk=args.top_k_compoments)
     print(top_pcs, scores)
+
+if args.verbose:
+    print("____COMPLETE____")
