@@ -4,7 +4,9 @@ import argparse
 import os
 import json
 import sys
+import csv
 
+from tqdm import tqdm
 from Decomposed_matrices import Decomposed_matrices
 from Genomic_bins import Genomic_bins
 from great import read_great_res_wrapper
@@ -39,6 +41,9 @@ parser.add_argument('-i', '--input_snps', action=StoreDictKeyPair, nargs="+", me
 parser.add_argument('-a', '--input_assays', nargs="+", type=int, default=None,
                     help='assay indices')
 
+parser.add_argument('-f', '--input_file', type=str, default=None,
+                    help='input file of SNPs in .csv format')
+
 parser.add_argument('-o', '--output_file', type=str,
                     default='./snp2chip_out.txt', help='output directory')
 
@@ -63,7 +68,7 @@ args = parser.parse_args()
 #-----------------------------------------
 #   Process/Check Inputs
 #-----------------------------------------
-if args.input_snps is None and args.input_assays is None:
+if args.input_snps is None and args.input_assays is None and args.input_file is None:
     raise ValueError("Please provide valid assay IDs or SNP indices.")
 if args.input_snps is not None and args.input_assays is not None:
     raise ValueError("Please provide either assays or SNPs, not both.")
@@ -125,6 +130,31 @@ if args.input_snps is not None:
         top_pcs, scores = decomposed_mats.find_pcs_given_loci_list(genomic_bins.find_loci_given_snps(chrs,snps), args.weights, topk=args.top_k_compoments)
         with open(args.output_file, 'a+') as f:
             f.write('{},{},{},{},{}\n'.format(chrs, snps, args.top_k_compoments, top_pcs, scores, args.weights))
+
+elif args.input_file is not None:
+    if args.multi:
+        df = pd.read_csv(args.input_file)
+        ids = df['Unnamed: 0'].values
+        diseases = df['DISEASE/TRAIT'].values
+        chrs = df['CHR_ID'].values
+        snps = df['CHR_POS'].values
+        contexts = df['CONTEXT'].values
+        intergenics = df['INTERGENIC'].values
+
+        for idx, snp in tqdm(enumerate(snps), desc='Computing PCs'):
+            try:
+                top_pcs, scores = decomposed_mats.find_pcs_given_locus(genomic_bins.find_locus_given_snp(chrs[idx], snp), topk=args.top_k_compoments)
+                with open(args.output_file, 'a+') as f:
+                    writer = csv.writer(f, lineterminator='\n')
+                    writer.writerow([ids[idx], chrs[idx], snp, args.top_k_compoments, top_pcs, scores, diseases[idx], contexts[idx], intergenics[idx]])
+                    #f.write('{},{}:{},{},{},{},{},{},{}\n'.format(ids[idx], chrs[idx], snp, args.top_k_compoments, top_pcs, scores, diseases[idx], contexts[idx], intergenics[idx]))
+            except:
+                with open(args.output_file[:-4]+'_err.csv', 'a+') as f:
+                    writer = csv.writer(f, lineterminator='\n')
+                    writer.writerow([ids[idx], chrs[idx], snp, args.top_k_compoments, diseases[idx], contexts[idx], intergenics[idx]])
+                    #f.write('{},{}:{},{},{},{},{}\n'.format(ids[idx], chrs[idx], snp, args.top_k_compoments, diseases[idx], contexts[idx], intergenics[idx]))
+    else:
+        raise ValueError("Please run SNP2CHIP for csv of SNPs on multi-mode.")
 else:
     # if user inputs assay indices
     if args.weights is not None:
