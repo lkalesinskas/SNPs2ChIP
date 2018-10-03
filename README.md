@@ -11,8 +11,8 @@ You can install our source code by cloning our Git repository and download the r
 ```
 $ git clone git@github.com:lkalesinskas/bigtranscription.git
 $ cd bigtranscription
-$ wget http://bejerano.stanford.edu/SNPs2ChIP/SNPs2ChIP_data.tar
-$ tar xvf SNPs2ChIP_data.tar
+$ wget http://cs.stanford.edu/people/ytanigaw/SNPs2ChIP_GREAT_data.tar
+$ tar xvf SNPs2ChIP_GREAT_data.tar
 ```
 
 
